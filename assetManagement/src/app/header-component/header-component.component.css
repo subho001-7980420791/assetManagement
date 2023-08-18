@@ -1,0 +1,18 @@
+.outer{
+    display: flex;
+    background-color: white;
+    align-items: center;
+    height: 5rem;
+    justify-content: space-between;
+}
+.icon_div{
+    display: flex;
+    width: 10rem;
+    justify-content: space-between;
+}
+.icon_div {
+    font-size: 35px !important
+}
+.imgg{
+    height: 5rem;
+}
