@@ -12,6 +12,8 @@ import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.
 import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
 import {MainMenuComponent} from '@pages/main-menu/main-menu.component';
 import {SubMenuComponent} from '@pages/main-menu/sub-menu/sub-menu.component';
+import { AddRoomComponent } from './add-room/add-room.component';
+import { AddBuildingComponent } from './add-building/add-building.component';
 
 const routes: Routes = [
     {
@@ -39,6 +41,14 @@ const routes: Routes = [
             {
                 path: '',
                 component: DashboardComponent
+            },
+            {
+                path:'add/room',
+                component:AddRoomComponent
+            },
+            {
+                path:'add/building',
+                component:AddBuildingComponent
             }
         ]
     },
@@ -62,6 +72,7 @@ const routes: Routes = [
         component: RecoverPasswordComponent,
         canActivate: [NonAuthGuard]
     },
+    
     {path: '**', redirectTo: ''}
 ];
 
