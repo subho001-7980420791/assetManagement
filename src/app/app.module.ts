@@ -37,6 +37,10 @@ import {SidebarSearchComponent} from './components/sidebar-search/sidebar-search
 import { AddRoomComponent } from './add-room/add-room.component';
 import { AddBuildingComponent } from './add-building/add-building.component';
 import { AddAssetComponent } from './add-asset/add-asset.component';
+import { UsersComponent } from './pages/users/users.component';
+import { UserDialogComponent } from './pages/user-dialog/user-dialog.component';
+import { CountryComponent } from './pages/country/country.component';
+import { CountryDialogComponent } from './pages/country-dialog/country-dialog.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -63,9 +67,14 @@ registerLocaleData(localeEn, 'en-EN');
         MenuItemComponent,
         ControlSidebarComponent,
         SidebarSearchComponent,
+        UsersComponent,
+        UserDialogComponent,
+        CountryComponent,
+        CountryDialogComponent,
         AddRoomComponent,
         AddBuildingComponent,
         AddAssetComponent
+
     ],
     imports: [
         ProfabricComponentsModule,
