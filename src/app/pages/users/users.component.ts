@@ -1,7 +1,5 @@
-import { UserDialogComponent } from '@pages/user-dialog/user-dialog.component';
-import { Component, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '@services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { BackendService } from '@services/backend.service';
 
 
 @Component({
@@ -12,27 +10,29 @@ import { UserService } from '@services/user.service';
 
 
 export class UsersComponent implements OnInit {
-
-  buildingForm: FormGroup;
   users: { userId: number; userName: string; isActive: boolean; }[] = [];
   displayedColumns: string[] = ['userId', 'user Name', 'Active status'];
   showPopup:any=false;
-  constructor(public userService: UserService, private formBuilder: FormBuilder) { }
+  dataSource:any[];
+  constructor(private backend: BackendService) { }
 
   ngOnInit(): void {
-    console.log(this.buildingForm);
-    this.buildingForm = this.formBuilder.group({
-      //userId: [''],
-      userName:['', Validators.required],
-      isActive:['']
-    });
+    this.getUsers()
   }
 
   openDialog(): void {
     this.showPopup=true;
   }
 
-  closeDialog() {
+  async closeDialog() {
     this.showPopup = false;
+    await this.getUsers()
   }
+  async getUsers(){
+    const data=await this.backend.makeGetApiCall('user')
+    if(data?.data?.length>0)
+    {
+      this.dataSource=data.data
+    } 
+}
 }

@@ -1,7 +1,7 @@
 
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '@services/user.service';
+import { BackendService } from '@services/backend.service';
 
 
 @Component({
@@ -13,21 +13,19 @@ export class UserDialogComponent implements OnInit {
 
   @Input() showPopup: any;
   @Output() closeDialog = new EventEmitter<void>();
-
   buildingForm: FormGroup;
   users: { userId: number; userName: string; isActive: boolean; }[] = [];
 
 
   constructor(
-    private userService: UserService,
     private formBuilder: FormBuilder,
-    private el: ElementRef,
+    private backend: BackendService
   ) {}
 
   ngOnInit(): void {
     this.buildingForm = this.formBuilder.group({
       userName: ['',Validators.required],
-      isActive: ['']
+      isActive: [true,Validators.required]
     });
   }
 
@@ -35,12 +33,13 @@ export class UserDialogComponent implements OnInit {
     this.closeDialog.emit();
   }
 
-  onOkClick(): void {
+  async onOkClick(): Promise<void> {
     const newUser = {
       userName: this.buildingForm.get('userName')?.value,
       isActive: this.buildingForm.get('isActive')?.value,
     };
-    this.userService.data.push(newUser); // Adding the new user to the array
+    await this.backend.makePostApiCall('user',newUser)
+
     this.onNoClick();
   }
 
@@ -49,5 +48,5 @@ export class UserDialogComponent implements OnInit {
     isActiveControl.setValue(!isActiveControl.value);
   }
 
-
+  
 }

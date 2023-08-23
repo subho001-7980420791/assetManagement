@@ -1,7 +1,7 @@
 //import { CountryDialogComponent } from './../country-dialog/country-dialog.component';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '@services/user.service';
+import { BackendService } from '@services/backend.service';
 
 
 @Component({
@@ -12,20 +12,15 @@ import { UserService } from '@services/user.service';
 
 
 export class CountryComponent implements OnInit {
-
+  dataSource:any[];
   buildingForm: FormGroup;
   users: { userId: number; userName: string; isActive: boolean; }[] = [];
   displayedColumns: string[] = ['countryId', 'country Name', 'Active status'];
   showPopup:any=false;
-  constructor(public userService: UserService, private formBuilder: FormBuilder) { }
+  constructor( private backend: BackendService) { }
 
   ngOnInit(): void {
-    console.log(this.buildingForm);
-    this.buildingForm = this.formBuilder.group({
-      //userId: [''],
-      countryName:['', Validators.required],
-      isActive:['']
-    });
+    this.getCountry()
   }
 
   openDialog(): void {
@@ -34,5 +29,13 @@ export class CountryComponent implements OnInit {
 
   closeDialog() {
     this.showPopup = false;
+    this.getCountry()
+  }
+  async getCountry(){
+    const data=await this.backend.makeGetApiCall('country')
+    if(data?.data?.length>0)
+    {
+      this.dataSource=data.data
+    } 
   }
 }
