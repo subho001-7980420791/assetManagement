@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '@services/user.service';
-
+import { BackendService } from '@services/backend.service';
 
 @Component({
   selector: 'app-country-dialog',
@@ -20,6 +20,7 @@ export class CountryDialogComponent implements OnInit {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private el: ElementRef,
+    private backendService:BackendService
   ) {}
 
   ngOnInit(): void {
@@ -34,12 +35,13 @@ export class CountryDialogComponent implements OnInit {
   }
 
 
-  onOkClick(): void {
+  async onOkClick(): Promise<void> {
     const newUser = {
       countryName: this.buildingForm.get('countryName')?.value,
       isActive: this.buildingForm.get('isActive')?.value,
     };
     this.userService.data.push(newUser); // Adding the new user to the array
+    await this.backendService.makePostApiCall('country',newUser)
     this.onNoClick();
   }
 
@@ -47,6 +49,5 @@ export class CountryDialogComponent implements OnInit {
     const isActiveControl = this.buildingForm.get('isActive') as FormControl;
     isActiveControl.setValue(!isActiveControl.value);
   }
-
 
 }
