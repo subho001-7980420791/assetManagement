@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CountryService } from '@services/country.service';
-
+import { BackendService } from '@services/backend.service';
 @Component({
   selector: 'app-add-room',
   templateUrl: './add-room.component.html',
@@ -23,11 +23,11 @@ export class AddRoomComponent implements OnInit{
       isActive:[true, Validators.required],
     })
   })
-  constructor(public countryService:CountryService,private fb: FormBuilder) {
+  constructor(public countryService:CountryService,private fb: FormBuilder,public backEndService:BackendService) {
    }
-  ngOnInit(): void {
-    this.building=this.countryService.buildings
-    
+  async ngOnInit(): Promise<void> {
+     this.getBuilding()
+     this.getRoom()    
   }
   openDialog(): void {
     this.showPopup=true
@@ -35,15 +35,33 @@ export class AddRoomComponent implements OnInit{
   closePopup(){
     this.showPopup=false
   }
-  onSubmit(){
+  async onSubmit(){
       this.dataSource.push(this.factory.getRawValue())
+      await this.backEndService.makePostApiCall('room',this.factory.getRawValue())
       this.showPopup=false
   }
   change(event:any){
+    console.log(event.target.value)
     let buildingSelected=this.building.filter(x=>x.buildingName===event.target.value)
     this.factory.get('buildingDetails')?.get('buildingId')?.patchValue(buildingSelected[0]['buildingId'])
     this.factory.get('buildingDetails')?.get('countryId')?.patchValue(buildingSelected[0]['countryId'])
     this.factory.get('buildingDetails')?.get('countryName')?.patchValue(buildingSelected[0]['countryName'])
     this.factory.get('buildingDetails')?.get('address')?.patchValue(buildingSelected[0]['address'])
+  }
+  async getBuilding(){
+    const data=await this.backEndService.makeGetApiCall('building')
+    console.log(data.data)
+    if(data?.data?.length>0)
+    {
+      this.building=data.data
+    }
+  }
+  async getRoom(){
+    const data=await this.backEndService.makeGetApiCall('room')
+    console.log(data)
+    if(data?.data?.length>0)
+    {
+      this.dataSource=data.data
+    }
   }
 }

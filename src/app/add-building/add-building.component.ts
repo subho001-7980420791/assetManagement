@@ -1,27 +1,29 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CountryService } from '@services/country.service';
+import { BackendService } from '@services/backend.service';
 @Component({
   selector: 'app-add-building',
   templateUrl: './add-building.component.html',
   styleUrls: ['./add-building.component.scss']
 })
-export class AddBuildingComponent {
+export class AddBuildingComponent implements OnInit{
   displayedColumns: string[] = ['Room', 'Country', 'Building', 'Address'];
-  dataSource:any[]=[];
+  dataSource:any[];
   showPopup:boolean=false
   country:any[]=[]
   public buildingDetails:FormGroup = this.fb.group({
     buildingName: ['',Validators.required],
       countryName:['',Validators.required],
       countryId:['',Validators.required],
-      address:['',Validators.required]    
+      address:['',Validators.required],
+      isActive:[true,Validators.required]    
   })
-  constructor(public countryService:CountryService,private fb: FormBuilder) {
+  constructor(public countryService:CountryService,private fb: FormBuilder,private backEndService:BackendService) {
    }
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.country=this.countryService.countries
-    
+     this.getBuildings()
   }
   openDialog(): void {
     this.showPopup=true
@@ -29,8 +31,10 @@ export class AddBuildingComponent {
   closePopup(){
     this.showPopup=false
   }
-  onSubmit(){
+  async onSubmit(){
       this.dataSource.push(this.buildingDetails.getRawValue())
+      console.log(this.buildingDetails.getRawValue())
+      await this.backEndService.makePostApiCall('building',this.buildingDetails.getRawValue())
       this.buildingDetails.reset()
       this.showPopup=false
   }
@@ -38,5 +42,16 @@ export class AddBuildingComponent {
     let countrySelected=this.country.filter(x=>x.countryName===event.target.value)
     this.buildingDetails.get('countryName')?.patchValue(countrySelected[0]['countryName'])
     this.buildingDetails.get('countryId')?.patchValue(countrySelected[0]['countryId'])
+    this.buildingDetails.get('isActive')?.patchValue(true)
+    console.log(this.buildingDetails.getRawValue())
+  }
+  async getBuildings(){
+    const data=await this.backEndService.makeGetApiCall('building')
+    console.log(data)
+    if(data?.data?.length>0)
+    {
+      this.dataSource=data.data
+      console.log(data)
+    }
   }   
 }

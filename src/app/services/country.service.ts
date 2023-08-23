@@ -22,59 +22,10 @@ export class CountryService {
       isActive:true,
     },
   ]
-  buildings=[
-    {    
-      countryId:1,
-      buildingId:1,
-      buildingName:"Ecospace",
-      countryName:"India",
-      address:"sdlfkjsdfjsdkljf",
-      isActive:true,
-    },
-    {    
-      countryId:1,
-      buildingId:2,
-      buildingName:"Dakers Lane",
-      countryName:"India",
-      address:"sdlfkjsdfjsdkljf",
-      isActive:true,
-    },
-    {    
-      countryId:2,
-      buildingId:3,
-      buildingName:"Dhaka",
-      countryName:"Bangladesh",
-      address:"sdlfkjsdfjsdkljf",
-      isActive:true,
-    },
-    {
-      countryId:2,
-      buildingId:4,
-      buildingName:"Jadavpur",
-      countryName:"Bangladessh",
-      address:"sdlfkjsdfjsdkljf",
-      isActive:true,
-    },
-    {
-      countryId:3,
-      buildingId:5,
-      buildingName:"NYC",
-      countryName:"USA",
-      address:"sdlfkjsdfjsdkljf",
-      isActive:true, 
-    },
-    {
-      countryId:3,
-      buildingId:6,
-      buildingName:"Miami",
-      countryName:"USA",
-      address:"sdlfkjsdfjsdkljf",
-      isActive:true, 
-    }
-  ]
-  roomId:any[]=[1,2,3,4,5,6,7,8,9,10]
+  buildings=[]
+  roomId:any[]=[]
   allocatedRoomId:any[]=[]
-  buildingId:any[]=[1,2,3,4,5,6]
+  buildingId:any[]=[]
   data: any[] = [];
   assets:any[]=[]
   constructor() { }
