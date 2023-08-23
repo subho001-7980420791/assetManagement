@@ -1,0 +1,178 @@
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+      <div class="row mb-2">
+          <div class="col-sm-6">
+              <h1>User Management</h1>
+          </div>
+          <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active">User Management</li>
+              </ol>
+          </div>
+      </div>
+  </div>
+  <!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <!-- Default box -->
+  <div class="container-fluid">
+      <div class="card">
+          <div class="card-header">
+              <h3 class="card-title">Title</h3>
+
+              <div class="card-tools">
+                  <button
+                      type="button"
+                      class="btn btn-tool"
+                      data-widget="collapse"
+                      data-toggle="tooltip"
+                      title="Collapse"
+                  >
+                      <i class="fa fa-minus"></i>
+                  </button>
+                  <button
+                      type="button"
+                      class="btn btn-tool"
+                      data-widget="remove"
+                      data-toggle="tooltip"
+                      title="Remove"
+                  >
+                      <i class="fa fa-times"></i>
+                  </button>
+              </div>
+          </div>
+          <div class="card-body">
+              <!-- Start creating your amazing application! -->
+
+
+              <section class="content-header">
+                <div class="container-fluid">
+                  <div class="row centrifyComponentPadding">
+                    <div class="col-md-12">
+                      <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">View User</h3>
+                        </div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label for="searchInput1">Search Something</label>
+                                <div class="input-group">
+                                  <input type="text" class="form-control" id="searchInput1" placeholder="Type something..">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group-edited">
+                                <label for="searchInput2">Search Something</label>
+                                <div class="input-group">
+                                  <input type="text" class="form-control" id="searchInput2" placeholder="Type something..">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-2 centralize centrify">
+                              <br>
+                              <button class="btn btn-primary">
+                                <i class="fas fa-cog"></i>
+                                <span>Setup</span>
+                              </button>
+                            </div>
+                            <div class="col-md-2 centralize centrify">
+                              <br>
+                              <button class="btn btn-success h3rem" (click)="openDialog()">
+                                <i class="fas fa-plus"></i> ADD USER
+                              </button>
+                            </div>
+                            <!-- <app-user-dialog></app-user-dialog> -->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card card-primary">
+                        <div class="card-header">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <h3 class="card-title">User List</h3>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="card-tools">
+                                <button class="btn btn-primary">
+                                  <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <button class="btn btn-primary">
+                                  <span class="clear-all">Clear All</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <button class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Bulk Edit
+                              </button>
+                            </div>
+                            <div class="col-md-3">
+                              <button class="btn btn-info">
+                                <i class="fas fa-file-import"></i> Import Asset
+                              </button>
+                            </div>
+                            <div class="col-md-3">
+                              <button class="btn btn-success">
+                                <i class="fas fa-file-export"></i> Export to CSV
+                              </button>
+                            </div>
+                            <div class="col-md-3">
+                              <button class="btn btn-danger">
+                                <i class="fas fa-file-export"></i> Export to PDF
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-body mat-elevation-z8">
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>userId</th>
+                                <th>user Name</th>
+                                <th>Active status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor= "let element of userService.data">
+                                <td>{{ element.userId }}</td>
+                                <td>{{ element.userName }}</td>
+                                <td>{{ element.isActive }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+          </div>
+
+      </div>
+  </div>
+  <!-- /.card -->
+</section>
+<!-- /.content -->
+<app-user-dialog *ngIf="showPopup" (closeDialog)="closeDialog()" ></app-user-dialog>
