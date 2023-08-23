@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '@services/user.service';
+import { BackendService } from '@services/backend.service';
 
 
 @Component({
@@ -17,15 +17,14 @@ export class CountryDialogComponent implements OnInit {
   countries: { countryId: number; countryName: string; isActive: boolean; }[] = [];
 
   constructor(
-    private userService: UserService,
     private formBuilder: FormBuilder,
-    private el: ElementRef,
+    private backend: BackendService
   ) {}
 
   ngOnInit(): void {
     this.buildingForm = this.formBuilder.group({
       countryName: ['',Validators.required],
-      isActive: ['']
+      isActive: [true,Validators.required]
     });
   }
 
@@ -34,12 +33,12 @@ export class CountryDialogComponent implements OnInit {
   }
 
 
-  onOkClick(): void {
+  async onOkClick(): Promise<void> {
     const newUser = {
       countryName: this.buildingForm.get('countryName')?.value,
       isActive: this.buildingForm.get('isActive')?.value,
     };
-    this.userService.data.push(newUser); // Adding the new user to the array
+    await this.backend.makePostApiCall('country',newUser)
     this.onNoClick();
   }
 

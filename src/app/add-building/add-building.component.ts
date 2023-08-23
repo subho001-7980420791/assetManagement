@@ -33,7 +33,6 @@ export class AddBuildingComponent implements OnInit{
   }
   async onSubmit(){
       this.dataSource.push(this.buildingDetails.getRawValue())
-      console.log(this.buildingDetails.getRawValue())
       await this.backEndService.makePostApiCall('building',this.buildingDetails.getRawValue())
       this.buildingDetails.reset()
       this.showPopup=false
@@ -47,11 +46,9 @@ export class AddBuildingComponent implements OnInit{
   }
   async getBuildings(){
     const data=await this.backEndService.makeGetApiCall('building')
-    console.log(data)
     if(data?.data?.length>0)
     {
       this.dataSource=data.data
-      console.log(data)
     }
   }   
 }
