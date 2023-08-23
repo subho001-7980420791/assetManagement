@@ -73,6 +73,8 @@ export class CountryService {
     }
   ]
   roomId:any[]=[1,2,3,4,5,6,7,8,9,10]
+  allocatedRoomId:any[]=[]
+  buildingId:any[]=[1,2,3,4,5,6]
   data: any[] = [];
   assets:any[]=[]
   constructor() { }

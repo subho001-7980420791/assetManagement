@@ -36,6 +36,7 @@ import {ProfabricComponentsModule} from '@profabric/angular-components';
 import {SidebarSearchComponent} from './components/sidebar-search/sidebar-search.component';
 import { AddRoomComponent } from './add-room/add-room.component';
 import { AddBuildingComponent } from './add-building/add-building.component';
+import { AddAssetComponent } from './add-asset/add-asset.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -63,7 +64,8 @@ registerLocaleData(localeEn, 'en-EN');
         ControlSidebarComponent,
         SidebarSearchComponent,
         AddRoomComponent,
-        AddBuildingComponent
+        AddBuildingComponent,
+        AddAssetComponent
     ],
     imports: [
         ProfabricComponentsModule,

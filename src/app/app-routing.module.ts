@@ -14,6 +14,7 @@ import {MainMenuComponent} from '@pages/main-menu/main-menu.component';
 import {SubMenuComponent} from '@pages/main-menu/sub-menu/sub-menu.component';
 import { AddRoomComponent } from './add-room/add-room.component';
 import { AddBuildingComponent } from './add-building/add-building.component';
+import { AddAssetComponent } from './add-asset/add-asset.component';
 
 const routes: Routes = [
     {
@@ -49,6 +50,10 @@ const routes: Routes = [
             {
                 path:'add/building',
                 component:AddBuildingComponent
+            },
+            {
+                path:'asset',
+                component:AddAssetComponent
             }
         ]
     },
