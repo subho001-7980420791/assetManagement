@@ -10,10 +10,12 @@ import {AuthGuard} from '@guards/auth.guard';
 import {NonAuthGuard} from '@guards/non-auth.guard';
 import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.component';
 import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
-import {MainMenuComponent} from '@pages/main-menu/main-menu.component';
 import {SubMenuComponent} from '@pages/main-menu/sub-menu/sub-menu.component';
 import { UsersComponent } from '@pages/users/users.component';
 import { CountryComponent } from '@pages/country/country.component';
+import { AddAssetComponent } from './add-asset/add-asset.component';
+import { AddBuildingComponent } from './add-building/add-building.component';
+import { AddRoomComponent } from './add-room/add-room.component';
 
 
 const routes: Routes = [
@@ -55,7 +57,19 @@ const routes: Routes = [
       {
         path:'country',
         component: CountryComponent
-      }
+      },
+      {
+        path:'add/room',
+        component:AddRoomComponent
+    },
+    {
+        path:'add/building',
+        component:AddBuildingComponent
+    },
+    {
+        path:'asset',
+        component:AddAssetComponent
+    }
 
   ]
   },
