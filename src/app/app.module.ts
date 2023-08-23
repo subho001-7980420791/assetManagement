@@ -34,6 +34,10 @@ import {authReducer} from './store/auth/reducer';
 import {uiReducer} from './store/ui/reducer';
 import {ProfabricComponentsModule} from '@profabric/angular-components';
 import {SidebarSearchComponent} from './components/sidebar-search/sidebar-search.component';
+import { UsersComponent } from './pages/users/users.component';
+import { UserDialogComponent } from './pages/user-dialog/user-dialog.component';
+import { CountryComponent } from './pages/country/country.component';
+import { CountryDialogComponent } from './pages/country-dialog/country-dialog.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -59,7 +63,11 @@ registerLocaleData(localeEn, 'en-EN');
         SubMenuComponent,
         MenuItemComponent,
         ControlSidebarComponent,
-        SidebarSearchComponent
+        SidebarSearchComponent,
+        UsersComponent,
+        UserDialogComponent,
+        CountryComponent,
+        CountryDialogComponent
     ],
     imports: [
         ProfabricComponentsModule,
