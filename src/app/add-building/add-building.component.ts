@@ -30,6 +30,7 @@ export class AddBuildingComponent implements OnInit{
   }
   closePopup(){
     this.showPopup=false
+    this.buildingDetails.reset()
   }
   async onSubmit(){
       this.dataSource.push(this.buildingDetails.getRawValue())

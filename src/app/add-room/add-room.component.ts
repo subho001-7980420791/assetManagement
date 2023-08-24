@@ -34,6 +34,7 @@ export class AddRoomComponent implements OnInit{
   }
   closePopup(){
     this.showPopup=false
+    this.factory.reset()
   }
   async onSubmit(){
       this.dataSource.push(this.factory.getRawValue())
