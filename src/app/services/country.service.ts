@@ -5,23 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class CountryService {
   region:any[]=["Europe","America","Asia"]
-  countries=[
-    {    
-      countryId:1,
-      countryName:"India",
-      isActive:true,
-    },
-    {    
-      countryId:2,
-      countryName:"Bangladesh",
-      isActive:true,
-    },
-    {    
-      countryId:3,
-      countryName:"USA",
-      isActive:true,
-    },
-  ]
+  countries=[  ]
   buildings=[]
   roomId:any[]=[]
   allocatedRoomId:any[]=[]
