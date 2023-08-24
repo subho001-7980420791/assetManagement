@@ -37,6 +37,7 @@ export class AddAssetComponent {
   }
   closePopup(){
     this.showPopup=false
+    this.asset.reset()
   }
   async onSubmit(){
       this.dataSource.push(this.asset.getRawValue())
