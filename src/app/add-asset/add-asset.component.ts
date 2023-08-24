@@ -29,7 +29,7 @@ export class AddAssetComponent implements OnInit{
   constructor(public countryService:CountryService,private fb: FormBuilder,private backEndService:BackendService) {
    }
  async ngOnInit(): Promise<void> {
-    this.country=this.countryService.countries
+  this.getCountry()
     this.getBuilding()
     this.getRoom()
     this.getUser()
@@ -40,6 +40,7 @@ export class AddAssetComponent implements OnInit{
   }
   closePopup(){
     this.showPopup=false
+    this.asset.reset()
   }
   async onSubmit(){
       this.dataSource.push(this.asset.getRawValue())
@@ -50,17 +51,17 @@ export class AddAssetComponent implements OnInit{
       this.showPopup=false
   }
   change(event:any){
-    this.asset.controls['allocated'].patchValue(true)
-    this.asset.controls['isActive'].patchValue(true)
-    this.countryService.allocatedRoomId=this.countryService.roomId.filter(x=>x.roomId!=event.target.value)
-    if(this.asset.controls['currentRoomId'].value === this.asset.controls['allocatedRoomId'].value){
-     if(this.asset.controls['currentRoomId'].value=='1')
-     this.asset.controls['allocatedRoomId'].patchValue('2')
-    else
-    this.asset.controls['allocatedRoomId'].patchValue('1')
-  this.asset.controls['allocatedRoomId'].setErrors(null)
-    return;
-    }
+  //   this.asset.controls['allocated'].patchValue(true)
+  //   this.asset.controls['isActive'].patchValue(true)
+  //   this.countryService.allocatedRoomId=this.countryService.roomId.filter(x=>x.roomId!=event.target.value)
+  //   if(this.asset.controls['currentRoomId'].value === this.asset.controls['allocatedRoomId'].value){
+  //    if(this.asset.controls['currentRoomId'].value=='1')
+  //    this.asset.controls['allocatedRoomId'].patchValue('2')
+  //   else
+  //   this.asset.controls['allocatedRoomId'].patchValue('1')
+  // this.asset.controls['allocatedRoomId'].setErrors(null)
+  //   return;
+  //   }
   }
   async getBuilding(){
     const data=await this.backEndService.makeGetApiCall('building')
@@ -192,52 +193,12 @@ export class AddAssetComponent implements OnInit{
     (pdfMake as any).createPdf(documentDefinition).download('asset_data_report.pdf');
   }
 
-  // convertToPDF() {
-  //   pdfMake.vfs = pdfFonts.pdfMake.vfs;
-  //   const documentDefinition = {
-  //     content: [
-  //       {
-  //         text: 'Dummy Data Report',
-  //         style: 'header',
-  //       },
-  //       {
-  //         table: {
-  //           headerRows: 1,
-  //           widths: ['auto', '*', '*', '*'],
-  //           body: [
-  //             ['Serial No',
-  //             'Sticker Id',
-  //             'Allocated Room Id',
-  //             'Current Room Id',
-  //             'Model Name',
-  //             'Model Id',
-  //             'Building Id',
-  //             'User Name'], // Table header
-  //             ...this.dataSource.map((dataSource) => [
-  //               dataSource.stickerId,
-  //               dataSource.allocatedRoomId,
-  //               dataSource.allocatedRoomId,
-  //               dataSource.allocatedRoomId,
-  //               dataSource.allocatedRoomId,
-  //               dataSource.allocatedRoomId,
-
-
-  //             ]), // Map the data array to rows in the table
-  //           ],
-  //         },
-  //       },
-  //     ],
-  //     styles: {
-  //       header: {
-  //         fontSize: 18,
-  //         bold: true,
-  //         margin: [0, 10, 0, 10],
-  //       },
-  //     },
-  //   };
-
-  //   (pdfMake as any).createPdf(documentDefinition).download('dummy_data_report.pdf');
-  // }
-
+  async getCountry(){
+    const data=await this.backEndService.makeGetApiCall('country')
+    console.log(data)
+    if(data?.data?.length>0)
+    {
+      this.country=data.data
+    }
+  }
 }
-

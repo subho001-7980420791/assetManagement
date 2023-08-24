@@ -22,7 +22,7 @@ export class AddBuildingComponent implements OnInit{
   constructor(public countryService:CountryService,private fb: FormBuilder,private backEndService:BackendService) {
    }
   async ngOnInit(): Promise<void> {
-    this.country=this.countryService.countries
+    this.getCountry()
      this.getBuildings()
   }
   openDialog(): void {
@@ -30,6 +30,7 @@ export class AddBuildingComponent implements OnInit{
   }
   closePopup(){
     this.showPopup=false
+    this.buildingDetails.reset()
   }
   async onSubmit(){
       this.dataSource.push(this.buildingDetails.getRawValue())
@@ -49,6 +50,13 @@ export class AddBuildingComponent implements OnInit{
     if(data?.data?.length>0)
     {
       this.dataSource=data.data
+    }
+  }
+  async getCountry(){
+    const data=await this.backEndService.makeGetApiCall('country')
+    if(data?.data?.length>0)
+    {
+      this.country=data.data
     }
   }   
 }

@@ -137,7 +137,7 @@
                       <option *ngFor="let c of country" [value]="c.countryName">{{ c.countryName }}</option>
                     </select>
                     <div *ngIf="buildingDetails.get('countryName').invalid && buildingDetails.get('countryName').touched" class="text-danger">
-                      Building Name is required
+                      Country Name is required
                     </div>
                   </div>
                   <div class="form-group">
