@@ -48,17 +48,17 @@ export class AddAssetComponent {
       this.showPopup=false
   }
   change(event:any){
-    this.asset.controls['allocated'].patchValue(true)
-    this.asset.controls['isActive'].patchValue(true)
-    this.countryService.allocatedRoomId=this.countryService.roomId.filter(x=>x.roomId!=event.target.value)
-    if(this.asset.controls['currentRoomId'].value === this.asset.controls['allocatedRoomId'].value){
-     if(this.asset.controls['currentRoomId'].value=='1')
-     this.asset.controls['allocatedRoomId'].patchValue('2')
-    else
-    this.asset.controls['allocatedRoomId'].patchValue('1')
-  this.asset.controls['allocatedRoomId'].setErrors(null)
-    return;
-    }
+  //   this.asset.controls['allocated'].patchValue(true)
+  //   this.asset.controls['isActive'].patchValue(true)
+  //   this.countryService.allocatedRoomId=this.countryService.roomId.filter(x=>x.roomId!=event.target.value)
+  //   if(this.asset.controls['currentRoomId'].value === this.asset.controls['allocatedRoomId'].value){
+  //    if(this.asset.controls['currentRoomId'].value=='1')
+  //    this.asset.controls['allocatedRoomId'].patchValue('2')
+  //   else
+  //   this.asset.controls['allocatedRoomId'].patchValue('1')
+  // this.asset.controls['allocatedRoomId'].setErrors(null)
+  //   return;
+  //   }
   }
   async getBuilding(){
     const data=await this.backEndService.makeGetApiCall('building')
