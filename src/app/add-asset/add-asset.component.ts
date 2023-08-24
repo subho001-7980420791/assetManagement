@@ -26,7 +26,7 @@ export class AddAssetComponent {
   constructor(public countryService:CountryService,private fb: FormBuilder,private backEndService:BackendService) {
    }
  async ngOnInit(): Promise<void> {
-    this.country=this.countryService.countries
+  this.getCountry()
     this.getBuilding()
     this.getRoom()
     this.getUser()
@@ -89,6 +89,14 @@ export class AddAssetComponent {
     if(data?.data?.length>0)
     {
       this.users=data.data
+    }
+  }
+  async getCountry(){
+    const data=await this.backEndService.makeGetApiCall('country')
+    console.log(data)
+    if(data?.data?.length>0)
+    {
+      this.country=data.data
     }
   }
 }
