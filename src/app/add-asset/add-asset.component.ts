@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CountryService } from '@services/country.service';
 import { BackendService } from '@services/backend.service';
+import  pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
 @Component({
   selector: 'app-add-asset',
   templateUrl: './add-asset.component.html',
   styleUrls: ['./add-asset.component.scss']
 })
-export class AddAssetComponent {
+export class AddAssetComponent implements OnInit{
   dataSource:any[]=[];
   showPopup:boolean=false
   users:any[]=[]
@@ -21,7 +24,7 @@ export class AddAssetComponent {
       assetModelId:['',Validators.required],
       allocated:[true,Validators.required],
       isActive:[true,Validators.required],
-      buildingId:['',Validators.required]    
+      buildingId:['',Validators.required]
   })
   constructor(public countryService:CountryService,private fb: FormBuilder,private backEndService:BackendService) {
    }
@@ -91,4 +94,150 @@ export class AddAssetComponent {
       this.users=data.data
     }
   }
+
+  convertToCSV() {
+    const columnNames = [
+      'Serial No',
+      'Sticker Id',
+      'Allocated Room Id',
+      'Current Room Id',
+      'Model Name',
+      'Model Id',
+      'Building Id',
+      'User Name'
+    ];
+
+    const csvRows = [columnNames.join(',')]; // Adding column names as the first row
+
+    this.dataSource.forEach((row, index) => {
+      const csvRowValues = [
+        index + 1,
+        row.stickerId.replace(/,/g, ''),
+        row.allocatedRoomId.replace(/,/g, ''),
+        row.currentRoomId.replace(/,/g, ''),
+        row.assetModelName.replace(/,/g, ''),
+        row.assetModelId.replace(/,/g, ''),
+        row.buildingId.replace(/,/g, ''),
+        row.allocatedUserId.replace(/,/g, '')
+      ];
+
+      csvRows.push(csvRowValues.join(','));
+    });
+
+    const csvContent = csvRows.join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'asset_data.csv';
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  }
+
+
+  convertToPDF() {
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    const columnNames = [
+      'Serial No',
+      'Sticker Id',
+      'Allocated Room Id',
+      'Current Room Id',
+      'Model Name',
+      'Model Id',
+      'Building Id',
+      'User Name'
+    ];
+
+    const tableRows = [columnNames];
+    this.dataSource.forEach((row, index) => {
+      const rowData = [
+        index + 1,
+        row.stickerId,
+        row.allocatedRoomId,
+        row.currentRoomId,
+        row.assetModelName,
+        row.assetModelId,
+        row.buildingId,
+        row.allocatedUserId
+      ];
+      tableRows.push(rowData);
+    });
+
+    const documentDefinition = {
+      content: [
+        {
+          text: 'Asset Data Report',
+          style: 'header'
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+            body: tableRows
+          }
+        }
+      ],
+      styles: {
+        header: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 8, 0, 8]
+        }
+      }
+    };
+
+    (pdfMake as any).createPdf(documentDefinition).download('asset_data_report.pdf');
+  }
+
+  // convertToPDF() {
+  //   pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  //   const documentDefinition = {
+  //     content: [
+  //       {
+  //         text: 'Dummy Data Report',
+  //         style: 'header',
+  //       },
+  //       {
+  //         table: {
+  //           headerRows: 1,
+  //           widths: ['auto', '*', '*', '*'],
+  //           body: [
+  //             ['Serial No',
+  //             'Sticker Id',
+  //             'Allocated Room Id',
+  //             'Current Room Id',
+  //             'Model Name',
+  //             'Model Id',
+  //             'Building Id',
+  //             'User Name'], // Table header
+  //             ...this.dataSource.map((dataSource) => [
+  //               dataSource.stickerId,
+  //               dataSource.allocatedRoomId,
+  //               dataSource.allocatedRoomId,
+  //               dataSource.allocatedRoomId,
+  //               dataSource.allocatedRoomId,
+  //               dataSource.allocatedRoomId,
+
+
+  //             ]), // Map the data array to rows in the table
+  //           ],
+  //         },
+  //       },
+  //     ],
+  //     styles: {
+  //       header: {
+  //         fontSize: 18,
+  //         bold: true,
+  //         margin: [0, 10, 0, 10],
+  //       },
+  //     },
+  //   };
+
+  //   (pdfMake as any).createPdf(documentDefinition).download('dummy_data_report.pdf');
+  // }
+
 }
+
