@@ -8,11 +8,11 @@ import { BackendService } from '@services/backend.service';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
- countryCount:number;
- assetCount:number;
- userCount:number;
- roomCount:number;
- buildingCount:number;
+ countryCount:number=0;
+ assetCount:number=0;
+ userCount:number=0;
+ roomCount:number=0;
+ buildingCount:number=0;
   constructor(private router: Router,private backend :BackendService) {}
   ngOnInit(): void {
     this.getCounts()
