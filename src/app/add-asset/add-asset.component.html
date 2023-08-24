@@ -151,7 +151,7 @@
                   <div class="form-group">
                     <label for="selectedOption">Allocated Room id</label>
                     <select id="selectedOption" class="form-control" formControlName="allocatedRoomId">
-                      <option *ngFor="let c of countryService.allocatedRoomId" [value]="c.roomId">{{ c.roomId }}</option>
+                      <option *ngFor="let c of countryService.roomId" [value]="c.roomId">{{ c.roomId }}</option>
                     </select>
                     <div *ngIf="asset.get('allocatedRoomId').invalid && asset.get('allocatedRoomId').touched" class="text-danger">
                       Allocated Room Id is required
