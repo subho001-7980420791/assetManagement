@@ -2,6 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CountryService } from '@services/country.service';
 import { BackendService } from '@services/backend.service';
+import  pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
 @Component({
   selector: 'app-add-building',
   templateUrl: './add-building.component.html',
@@ -17,7 +20,7 @@ export class AddBuildingComponent implements OnInit{
       countryName:['',Validators.required],
       countryId:['',Validators.required],
       address:['',Validators.required],
-      isActive:[true,Validators.required]    
+      isActive:[true,Validators.required]
   })
   constructor(public countryService:CountryService,private fb: FormBuilder,private backEndService:BackendService) {
    }
@@ -58,5 +61,80 @@ export class AddBuildingComponent implements OnInit{
     {
       this.country=data.data
     }
-  }   
+  }
+
+  convertToCSV() {
+    const columnNames = [
+      'Serial No',
+      'Building Name',
+      'Country',
+      'Address',
+    ];
+    const csvRows = [columnNames.join(',')]; // Adding column names as the first row
+    this.dataSource.forEach((row, index) => {
+      const csvRowValues = [
+        index + 1,
+        row.buildingName,
+        row.countryName,
+        row.address,
+      ];
+      csvRows.push(csvRowValues.join(','));
+    });
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'building_data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  convertToPDF() {
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    const columnNames = [
+      'Serial No',
+      'Building Name',
+      'Country',
+      'Address',
+    ];
+
+    const tableRows = [columnNames];
+    this.dataSource.forEach((row, index) => {
+      const rowData = [
+        index + 1,
+        row.buildingName,
+        row.countryName,
+        row.address,
+      ];
+      tableRows.push(rowData);
+    });
+
+    const documentDefinition = {
+      content: [
+        {
+          text: 'Building Data Report',
+          style: 'header'
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['auto', 'auto', 'auto', 'auto'],
+            body: tableRows
+          }
+        }
+      ],
+      styles: {
+        header: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 8, 0, 8]
+        }
+      }
+    };
+
+    (pdfMake as any).createPdf(documentDefinition).download('building_data_report.pdf');
+  }
+
+
 }
