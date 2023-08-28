@@ -78,28 +78,40 @@
                                         <i class="fas fa-edit"></i> Bulk Edit
                                     </button>
                                 </div>
+
+                                <!-- <div class="col-md-3">
+                                  <i class="fas fa-file-import"></i> Import Asset
+                                        <input type="file" class="file-upload" (change)="readExcel($event)">
+                                </div> -->
                                 <div class="col-md-3">
-                                    <button class="btn btn-info">
-                                        <i class="fas fa-file-import"></i> Import Asset
-                                    </button>
-                                </div>
+                                  <button class="btn btn-info">
+                                      <i class="fas fa-file-import"></i> Import Asset
+                                  </button>
+                              </div>
+                                <!-- <div class="col-md-3">
+                                  <label for="fileInput" class="file-label">
+                                      <i class="fas fa-file-import"></i> Import Asset
+                                      <input id="fileInput" type="file" class="file-upload" (change)="readExcel($event)">
+                                  </label>
+                              </div> -->
+
                                 <div class="col-md-3">
-                                    <button class="btn btn-success">
+                                    <button class="btn btn-success" (click)="convertToCSV()">
                                         <i class="fas fa-file-export"></i> Export to CSV
                                     </button>
                                 </div>
                                 <div class="col-md-3">
-                                    <button class="btn btn-danger">
+                                    <button class="btn btn-danger"(click)="convertToPDF()">
                                         <i class="fas fa-file-export"></i> Export to PDF
                                     </button>
                                 </div>
                             </div>
                         </div>
-  
+
       <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Serial No</th>
+            <th scope="col">Asset Id </th>
             <th scope="col">Sticker Id</th>
             <th scope="col">Allocated Room Id</th>
             <th scope="col">Current Room Id</th>
@@ -107,11 +119,13 @@
             <th scope="col">Model Id</th>
             <th scope="col">Building Id</th>
             <th scope="col">User Name</th>
+            <th scope="col">Readable By</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let data of dataSource; index as i">
-            <th scope="row">{{ i + 1 }}</th>
+            <!-- <th scope="row">{{ i + 1 }}</th> -->
+            <td>{{ data.assetId }}</td>
             <td>{{ data.stickerId }}</td>
             <td>{{ data.currentRoomId }}</td>
             <td>{{ data.allocatedRoomId }}</td>
@@ -119,10 +133,11 @@
             <td>{{ data.assetModelId }}</td>
             <td>{{ data.buildingId }}</td>
             <td>{{ data.allocatedUserId }}</td>
+            <td>{{ data.readableBy}}</td>
           </tr>
         </tbody>
       </table>
-    
+
       <div #popupOverlay class="popup-overlay" [hidden]="!showPopup">
         <div class="popup-content">
           <div class="card">
@@ -130,13 +145,13 @@
               <h3 class="card-title">Add Asset</h3>
             </div>
             <div class="card-body">
-              <form [formGroup]="asset">
+              <form [formGroup]= "asset">
                 <div class="form-group">
                   <label for="name">Sticker Id</label>
                   <input type="text" id="name" class="form-control" formControlName="stickerId">
                   <div *ngIf="asset.get('stickerId').invalid && asset.get('stickerId').touched" class="text-danger">
                     Sticker Id is required
-                  </div>            
+                  </div>
                 </div>
                   <div class="form-group">
                     <label for="selectedOption">Current Room id</label>
@@ -162,14 +177,14 @@
                     <input type="text" id="name" class="form-control" formControlName="assetModelName">
                     <div *ngIf="asset.get('assetModelName').invalid && asset.get('assetModelName').touched" class="text-danger">
                       Asset Model Name  is required
-                    </div>            
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="name">Model Id</label>
                     <input type="text" id="name" class="form-control" formControlName="assetModelId">
                     <div *ngIf="asset.get('assetModelId').invalid && asset.get('assetModelId').touched" class="text-danger">
                       Asset Model Id  is required
-                    </div>            
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="selectedOption">Building id</label>
@@ -189,6 +204,30 @@
                       User Name is required
                     </div>
                   </div>
+
+                  <div class="group-gap">
+                    <h5 class="mb-3">Readable By</h5>
+                    <div class="d-block my-3">
+
+                      <div class="custom-control custom-radio">
+                        <input id="rfid" type="radio" class="custom-control-input" value="RFID" name="readableBy" formControlName="readableBy">
+                        <label class="custom-control-label" for="rfid">RFID</label>
+                      </div>
+
+                      <div class="custom-control custom-radio">
+                        <input id="qr" type="radio" class="custom-control-input" value="QR" name="readableBy" formControlName="readableBy">
+                        <label class="custom-control-label" for="qr">QR Code</label>
+                      </div>
+
+                      <!-- <div class="invalid-feedback" >
+                        <p>Please select either value</p>
+                      </div> -->
+                    </div>
+                  </div>
+
+
+
+
                 <!-- Add more form controls as needed -->
                 <button type="submit" class="btn btn-primary" [disabled]="!(asset.valid)" (click)="onSubmit()">Submit</button>
                 <button type="close" class="btn btn-primary" style="margin-left: 1rem;" (click)="closePopup()">Close</button>
@@ -197,5 +236,5 @@
           </div>
         </div>
       </div>
-    
+
     </div>

@@ -1,14 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CountryService } from '@services/country.service';
 import { BackendService } from '@services/backend.service';
+import  pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as XLSX from 'xlsx';
+
 @Component({
   selector: 'app-add-asset',
   templateUrl: './add-asset.component.html',
   styleUrls: ['./add-asset.component.scss']
 })
-export class AddAssetComponent {
+export class AddAssetComponent implements OnInit{
+
   dataSource:any[]=[];
+  importedData: any[]=[];
   showPopup:boolean=false
   users:any[]=[]
   country:any[]=[]
@@ -21,7 +27,8 @@ export class AddAssetComponent {
       assetModelId:['',Validators.required],
       allocated:[true,Validators.required],
       isActive:[true,Validators.required],
-      buildingId:['',Validators.required]    
+      buildingId:['',Validators.required],
+      readableBy:['',Validators.required]
   })
   constructor(public countryService:CountryService,private fb: FormBuilder,private backEndService:BackendService) {
    }
@@ -40,8 +47,7 @@ export class AddAssetComponent {
     this.asset.reset()
   }
   async onSubmit(){
-      this.dataSource.push(this.asset.getRawValue())
-      console.log(this.asset.getRawValue())
+      this.dataSource.unshift(this.asset.getRawValue())
       await this.backEndService.makePostApiCall('asset',this.asset.getRawValue())
       this.asset.reset()
       this.countryService.allocatedRoomId=[]
@@ -92,6 +98,104 @@ export class AddAssetComponent {
       this.users=data.data
     }
   }
+
+  convertToCSV() {
+    const columnNames = [
+      'Serial No',
+      'Sticker Id',
+      'Allocated Room Id',
+      'Current Room Id',
+      'Model Name',
+      'Model Id',
+      'Building Id',
+      'User Name'
+    ];
+
+    const csvRows = [columnNames.join(',')]; // Adding column names as the first row
+
+    this.dataSource.forEach((row, index) => {
+      const csvRowValues = [
+        index + 1,
+        row.stickerId.replace(/,/g, ''),
+        row.allocatedRoomId.replace(/,/g, ''),
+        row.currentRoomId.replace(/,/g, ''),
+        row.assetModelName.replace(/,/g, ''),
+        row.assetModelId.replace(/,/g, ''),
+        row.buildingId.replace(/,/g, ''),
+        row.allocatedUserId.replace(/,/g, '')
+      ];
+
+      csvRows.push(csvRowValues.join(','));
+    });
+
+    const csvContent = csvRows.join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'asset_data.csv';
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  }
+
+
+  convertToPDF() {
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    const columnNames = [
+      'Serial No',
+      'Sticker Id',
+      'Allocated Room Id',
+      'Current Room Id',
+      'Model Name',
+      'Model Id',
+      'Building Id',
+      'User Name'
+    ];
+
+    const tableRows = [columnNames];
+    this.dataSource.forEach((row, index) => {
+      const rowData = [
+        index + 1,
+        row.stickerId,
+        row.allocatedRoomId,
+        row.currentRoomId,
+        row.assetModelName,
+        row.assetModelId,
+        row.buildingId,
+        row.allocatedUserId
+      ];
+      tableRows.push(rowData);
+    });
+
+    const documentDefinition = {
+      content: [
+        {
+          text: 'Asset Data Report',
+          style: 'header'
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+            body: tableRows
+          }
+        }
+      ],
+      styles: {
+        header: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 8, 0, 8]
+        }
+      }
+    };
+
+    (pdfMake as any).createPdf(documentDefinition).download('asset_data_report.pdf');
+  }
+
   async getCountry(){
     const data=await this.backEndService.makeGetApiCall('country')
     console.log(data)
@@ -100,4 +204,18 @@ export class AddAssetComponent {
       this.country=data.data
     }
   }
+
+  // readExcel(event:any){
+  //   let file = event.target.files[0];
+  //   let fileReader = new FileReader();
+  //   fileReader.readAsBinaryString(file);
+  //   fileReader.onload = (e)=>{
+  //     var workBook = XLSX.read(fileReader.result,{type:'binary'});
+  //     var sheetNames = workBook.SheetNames;
+  //     this.importedData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
+  //     console.log(this.importedData);
+  //   }
+  // }
+
+
 }
