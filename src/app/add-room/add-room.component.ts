@@ -2,6 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CountryService } from '@services/country.service';
 import { BackendService } from '@services/backend.service';
+import  pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
 @Component({
   selector: 'app-add-room',
   templateUrl: './add-room.component.html',
@@ -27,7 +30,7 @@ export class AddRoomComponent implements OnInit{
    }
   async ngOnInit(): Promise<void> {
      this.getBuilding()
-     this.getRoom()    
+     this.getRoom()
   }
   openDialog(): void {
     this.showPopup=true
@@ -64,5 +67,83 @@ export class AddRoomComponent implements OnInit{
     {
       this.dataSource=data.data
     }
+  }
+
+  convertToCSV() {
+
+    const columnNames = [
+      'Serial No',
+      'Room Name',
+      'Country Name',
+      'Building Name',
+      'Address'
+    ];
+    const csvRows = [columnNames.join(',')]; // Adding column names as the first row
+    this.dataSource.forEach((row, index) => {
+      const csvRowValues = [
+        index + 1,
+        row.roomName,
+        row.buildingDetails.countryName,
+        row.buildingDetails.buildingName,
+        row.buildingDetails.address,
+      ];
+      csvRows.push(csvRowValues.join(','));
+    });
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'room_data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  convertToPDF() {
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    const columnNames = [
+      'Serial No',
+      'Room',
+      'Country',
+      'Building',
+      'Address',
+    ];
+
+    const tableRows = [columnNames];
+    this.dataSource.forEach((row, index) => {
+      const rowData = [
+        index + 1,
+        row.roomName,
+        row.buildingDetails.countryName,
+        row.buildingDetails.buildingName,
+        row.buildingDetails.address,
+      ];
+      tableRows.push(rowData);
+    });
+
+    const documentDefinition = {
+      content: [
+        {
+          text: 'Room Data Report',
+          style: 'header'
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['auto', 'auto', 'auto', 'auto', 'auto'],
+            body: tableRows
+          }
+        }
+      ],
+      styles: {
+        header: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 8, 0, 8]
+        }
+      }
+    };
+
+    (pdfMake as any).createPdf(documentDefinition).download('room_data_report.pdf');
   }
 }

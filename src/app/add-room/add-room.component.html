@@ -84,12 +84,12 @@
                                   </button>
                               </div>
                               <div class="col-md-3">
-                                  <button class="btn btn-success">
+                                  <button class="btn btn-success" (click)="convertToCSV()">
                                       <i class="fas fa-file-export"></i> Export to CSV
                                   </button>
                               </div>
                               <div class="col-md-3">
-                                  <button class="btn btn-danger">
+                                  <button class="btn btn-danger" (click)="convertToPDF()">
                                       <i class="fas fa-file-export"></i> Export to PDF
                                   </button>
                               </div>
@@ -116,7 +116,7 @@
         </tr>
       </tbody>
     </table>
-  
+
     <div #popupOverlay class="popup-overlay" [hidden]="!showPopup">
       <div class="popup-content">
         <div class="card">
@@ -130,7 +130,7 @@
                 <input type="text" id="name" class="form-control" formControlName="roomName">
                 <div *ngIf="factory.get('roomName').invalid && factory.get('roomName').touched" class="text-danger">
                   Room Name is required
-                </div>            
+                </div>
               </div>
               <div formGroupName="buildingDetails">
                 <div class="form-group">
@@ -156,5 +156,5 @@
         </div>
       </div>
     </div>
-  
+
   </div>
