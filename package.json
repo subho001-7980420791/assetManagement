@@ -33,6 +33,8 @@
     "core-js": "3.25.0",
     "gatekeeper-client-sdk": "0.4.2",
     "luxon": "3.0.3",
+    "ng-qrcode": "^16.0.0",
+    "@techiediaries/ngx-qrcode": "^9.0.0",
     "ngx-toastr": "16.0.1",
     "process": "0.11.10",
     "rxjs": "7.5.6",

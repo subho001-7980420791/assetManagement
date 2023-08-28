@@ -41,6 +41,9 @@ import { UsersComponent } from './pages/users/users.component';
 import { UserDialogComponent } from './pages/user-dialog/user-dialog.component';
 import { CountryComponent } from './pages/country/country.component';
 import { CountryDialogComponent } from './pages/country-dialog/country-dialog.component';
+import { QrComponentComponent } from './qr-component/qr-component.component';
+import { QrCodeModule } from 'ng-qrcode';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -73,7 +76,8 @@ registerLocaleData(localeEn, 'en-EN');
         CountryDialogComponent,
         AddRoomComponent,
         AddBuildingComponent,
-        AddAssetComponent
+        AddAssetComponent,
+        QrComponentComponent
 
     ],
     imports: [
@@ -85,6 +89,7 @@ registerLocaleData(localeEn, 'en-EN');
         AppRoutingModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        NgxQRCodeModule,
         ToastrModule.forRoot({
             timeOut: 3000,
             positionClass: 'toast-top-right',
