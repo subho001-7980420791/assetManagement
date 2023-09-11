@@ -108,7 +108,8 @@ export class AddAssetComponent implements OnInit{
       'Model Name',
       'Model Id',
       'Building Id',
-      'User Name'
+      'User Name',
+      'Readable By'
     ];
 
     const csvRows = [columnNames.join(',')]; // Adding column names as the first row
@@ -122,7 +123,7 @@ export class AddAssetComponent implements OnInit{
         row.assetModelName.replace(/,/g, ''),
         row.assetModelId.replace(/,/g, ''),
         row.buildingId.replace(/,/g, ''),
-        row.allocatedUserId.replace(/,/g, '')
+        row.allocatedUserId.replace(/,/g, ''),
       ];
 
       csvRows.push(csvRowValues.join(','));
